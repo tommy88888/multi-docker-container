@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t justin8888/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run justin8888/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t justin8888/multi-client ./client
+  - docker build -t justin8888/multi-nginx ./nginx
+  - docker build -t justin8888/multi-server ./server
+  - docker build -t justin8888/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # take those images and push them to docker hub
+  - docker push justin8888/multi-client
+  - docker push justin8888/multi-nginx
+  - docker push justin8888/multi-server
+  - docker push justin8888/multi-worker
