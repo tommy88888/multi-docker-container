@@ -3,6 +3,7 @@ import './App.css';
 import Fib from './Fib';
 import OtherPage from './OtherPage';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import Fibo from './Fibo';
 
 function App() {
   return (
@@ -19,10 +20,11 @@ function App() {
             target='_blank'
             rel='noopener noreferrer'
           >
-            Learn React..
+            fib calculator version 3
           </a>
         </header>
         <Route exact path='/' component={Fib} />
+        {/* <Route exact path='/' component={Fibo} /> */}
         <Route path='/otherpage' component={OtherPage} />
       </div>
     </Router>

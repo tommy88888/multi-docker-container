@@ -6,6 +6,7 @@ class Fib extends Component {
     seenIndexes: [],
     values: {},
     i: '',
+    // value: '',
   };
 
   componentDidMount() {
@@ -28,9 +29,12 @@ class Fib extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
 
-    await axios.post('/api/values', {
+    const res = await axios.post('/api/values', {
       i: this.state.i,
     });
+
+    console.log('fib file', res.data);
+
     this.setState({ i: '' });
   };
 
@@ -48,17 +52,38 @@ class Fib extends Component {
         </div>
       );
     }
+    console.log('entries', entries);
     return entries;
   }
 
+  // handleChange = (e) => {
+  //   let { value, min, max } = e.target;
+  //   value = Math.max(Number(min), Math.min(Number(max), Number(value)));
+
+  //   this.setState({ value });
+  // };
+
   render() {
+    console.log(
+      'index: ',
+      this.state.i,
+      'values:',
+      this.state.values,
+      'seen indexes:',
+      this.state.seenIndexes
+    );
     return (
       <div>
         <form onSubmit={this.handleSubmit}>
           <label>Enter your index:</label>
           <input
+            // type='number'
+            max='40'
+            min='0'
             value={this.state.i}
+            // value={this.state.value}
             onChange={(e) => this.setState({ i: e.target.value })}
+            // onChange={this.handleChange}
           />
           <button>Submit</button>
         </form>
