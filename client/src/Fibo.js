@@ -56,7 +56,7 @@ const Fibo = () => {
         <label>Enter your index:</label>
         <input
           type='number'
-          max='50'
+          max='40'
           min='0'
           value={i}
           onChange={(e) => setI(e.target.value)}

@@ -7,20 +7,24 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: 'true'
     nginx.ingress.kubernetes.io/rewrite-target: /$1
 spec:
+  # ingressClassName: nginx
   rules:
-    - http:
+    - host: fibonacci.com
+      http:
         paths:
-          - path: /?(.*)
-            pathType: Prefix
-            backend:
-              service:
-                name: client-cluster-ip-service
-                port:
-                  number: 3000
           - path: /api/?(.*)
             pathType: Prefix
+            # pathType: ImplementationSpecific
             backend:
               service:
                 name: server-cluster-ip-service
                 port:
                   number: 5000
+          - path: /?(.*)
+            pathType: Prefix
+            # pathType: ImplementationSpecific
+            backend:
+              service:
+                name: client-cluster-ip-service
+                port:
+                  number: 3000
