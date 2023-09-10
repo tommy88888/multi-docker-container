@@ -39,7 +39,7 @@ const redisClient = redis.createClient({
 const redisPublisher = redisClient.duplicate();
 
 app.get('/', (req, res) => {
-  res.send('hollo world');
+  res.send('hallo world');
 });
 
 app.get('/values/all', async (req, res) => {
@@ -62,9 +62,14 @@ app.post('/values', async (req, res) => {
     return res.status(422).send('Index too high');
   }
 
+  if (parseInt(i) === '') {
+    return res.status(204).send('Index is empty');
+  }
+
   redisClient.hset('values', i, 'Nothing yet');
   redisPublisher.publish('insert', i);
-  pgClient.query('INSERT INTO values(number) VALUES($1)', [i]);
+  const query = pgClient.query('INSERT INTO values(number) VALUES($1)', [i]);
+  console.log('server query', query);
 
   res.send({ working: true, i });
 });

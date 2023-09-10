@@ -1,9 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
-import Fib from './Fib';
+import Fibo from './Fibo.js';
 import OtherPage from './OtherPage';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import Fibo from './Fibo';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
@@ -20,12 +19,13 @@ function App() {
             target='_blank'
             rel='noopener noreferrer'
           >
-            fib calculator version 3
+            fib calculator version 40
           </a>
         </header>
-        <Route exact path='/' component={Fib} />
-        {/* <Route exact path='/' component={Fibo} /> */}
-        <Route path='/otherpage' component={OtherPage} />
+        <Routes>
+          <Route exact path='/' element={<Fibo />} />
+          <Route path='/otherpage' element={<OtherPage />} />
+        </Routes>
       </div>
     </Router>
   );

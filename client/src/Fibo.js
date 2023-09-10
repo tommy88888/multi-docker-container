@@ -5,9 +5,15 @@ const Fibo = () => {
   const [i, setI] = useState('');
   const [values, setValues] = useState({});
   const [seenIndexes, setSeenIndexes] = useState([]);
-  const [value, setValue] = useState('');
 
-  console.log('index:', i,'values:', values,'seenIndexes:', seenIndexes);
+  console.log(
+    'index:',
+    i,
+    'values:',
+    values.values,
+    'seenIndexes:',
+    seenIndexes
+  );
 
   useEffect(() => {
     fetchValues();
@@ -17,6 +23,7 @@ const Fibo = () => {
   const fetchValues = async () => {
     const values = await axios.get('/api/values/current');
     setValues({ values: values.data });
+    console.log('current values', values.data);
   };
 
   const fetchIndexes = async () => {
@@ -27,35 +34,20 @@ const Fibo = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await axios.post('/api/values', {
-      i: setI(value),
-    });
-    console.log('fibo file', res.data);
-    setI('');
+    if (i.trim() === '' || i.trim() > 40) {
+      alert('can not be empty or larger than 40');
+      return;
+    } else {
+      const res = await axios.post('/api/values', {
+        i: i,
+      });
+      console.log('fibo file', res.data);
+      setI('');
+    }
   };
 
   const renderSeenIndexes = () => {
     return seenIndexes.map(({ number }) => number).join(', ');
-  };
-
-  let entries = [];
-  const renderValues = () => {
-    for (let key in values) {
-      entries.push(
-        <div key={key}>
-          For i {key} I calculated {values[key]}
-        </div>
-      );
-    }
-    console.log('fibo', entries)
-    return entries;
-  };
-
-  const handleChange = (e) => {
-    let { value, min, max } = e.target;
-    value = Math.max(Number(min), Math.min(Number(max), Number(value)));
-
-    setValue({ value });
   };
 
   return (
@@ -64,19 +56,23 @@ const Fibo = () => {
         <label>Enter your index:</label>
         <input
           type='number'
-          max='40'
+          max='50'
           min='0'
-          value={value}
-          onChange={handleChange}
+          value={i}
+          onChange={(e) => setI(e.target.value)}
         />
         <button>Submit</button>
       </form>
-
       <h3>Indexes I have seen:</h3>
       {renderSeenIndexes()}
-
       <h3>Calculated Values:</h3>
-      {renderValues()}
+      {/* {console.log(Object.entries(values))} */}
+      {values.values &&
+        Object.entries(values.values).map(([key, value], i) => (
+          <div key={i}>
+            For index {key} I calculated {value}
+          </div>
+        ))}
     </div>
   );
 };
